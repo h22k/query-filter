@@ -1,9 +1,10 @@
 {
-    "name": "h22k/queryfilter",
+    "name": "h22k/query-filter",
     "description": "Basic query filter package. You can filter any data (collective or individual) according to the query.",
-    "minimum-stability": "stable",
     "license": "MIT",
     "homepage": "https://github.com/h22k/query-filter",
+    "type": "library",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Halil Hakan Karabay",
@@ -12,6 +13,27 @@
         }
     ],
     "require": {
-        "php": "^8.0"
+        "php": "^8.0",
+        "laravel/laravel": "^v7.12.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "H22k\\Query-filter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "H22k\\Query-filter\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
     }
 }

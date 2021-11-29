@@ -1,0 +1,17 @@
+{
+    "name": "h22k/queryfilter",
+    "description": "Basic query filter package. You can filter any data (collective or individual) according to the query.",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "homepage": "https://github.com/h22k/query-filter",
+    "authors": [
+        {
+            "name": "Halil Hakan Karabay",
+            "email": "hakankarabay@icloud.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0"
+    }
+}

@@ -2,8 +2,9 @@
 
 namespace H22k\QueryFilter;
 
-use App\Models\User;
 use H22k\QueryFilter\Exceptions\ModelHasColumnName;
+use Illuminate\Database\Eloquent\Model;
+use JetBrains\PhpStorm\ArrayShape;
 
 class Column
 {
@@ -11,17 +12,16 @@ class Column
     /**
      * Checking if there is a similar column with the same name in the table.
      *
-     * @param string $model
+     * @param Model $model
      * @param string $typeName
-     * @param string $connection
      * @return string
      * @throws ModelHasColumnName
      */
-    public static function check(string $model, string $typeName, string $connection): string
+    private static function check(Model $model, string $typeName): string
     {
-        if (in_array($typeName, self::getCurrentColumns($model, $connection))) {
+        if (in_array($typeName, self::getCurrentColumns($model))) {
 
-            $tableName = self::getTableName($model);
+            $tableName = self::getTableNameAndConnection($model)['tableName'];
             throw new ModelHasColumnName
             ("You cannot use the name {$typeName} because there is a column with that name in the {$tableName} table.");
         }
@@ -31,26 +31,29 @@ class Column
     /**
      * Name standard.
      *
-     * @param string $model
+     * @param Model $model
      * @param string $typeName
-     * @param string $connection
      * @return string
      * @throws ModelHasColumnName
      */
-    public static function set(string $model, string $typeName, string $connection): string
+    public static function set(Model $model, string $typeName): string
     {
-        return self::check($model, $typeName, $connection);
+        return self::check($model, $typeName);
     }
 
     /**
      * Get current table name with eloquent getTable method.
      *
-     * @param string $model
-     * @return string
+     * @param Model $model
+     * @return array
      */
-    private static function getTableName(string $model): string
+    #[ArrayShape(['tableName' => "string", 'connection' => "string"])]
+    private static function getTableNameAndConnection(Model $model): array
     {
-        return (new $model)->getTable();
+        return [
+            'tableName' => $model->getTable(),
+            'connection' => $model->getConnection()->getDriverName()
+        ];
     }
 
     /**
@@ -68,13 +71,17 @@ class Column
     /**
      * Current model columns.
      *
-     * @param string $model
-     * @param string $connection
+     * @param Model $model
      * @return array
      */
-    private static function getCurrentColumns(string $model, string $connection): array
+    private static function getCurrentColumns(Model $model): array
     {
-        return self::getColumns($connection, self::getTableName($model));
+        [
+            'tableName'     => $tableName,
+            'connection'    => $connection
+        ] = self::getTableNameAndConnection($model);
+
+        return self::getColumns($connection, $tableName);
     }
 
 }

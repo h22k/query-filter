@@ -6,14 +6,6 @@ trait QueryFilter
 {
 
     /**
-     * Controller's main eloquent model.
-     * Example: UserController => Model/User.php => User::class.
-     *
-     * @var string
-     */
-    protected string $model;
-
-    /**
      * Model columns you want to filter.
      * Example: ['name', 'age', 'email']
      *
@@ -29,18 +21,32 @@ trait QueryFilter
     private string $queryTypeName = 'qt';
 
     /**
-     * Connection name. If you use another connection, change that.
+     * ?{$this->queryTypeName}= be should 'or' or 'and'.
+     * Example: ?qt=and is correct but ?qt=jhon is false.
      *
+     * @var array|string[]
+     */
+    private array $allowedQueryTypes = ['or', 'and'];
+
+    /**
      * @var string
      */
-    protected string $connectionType = 'mysql';
+    private string $defaultQueryType = 'or';
 
-    protected function filter(array $query, array|string $columns)
+
+    protected function filter()
     {
-        if (isset($query[$this->queryTypeName])) {
-            unset($query[$this->queryTypeName]);
+        $query = \Request::query() ?? [];
 
+        if (isset($query[$this->queryTypeName])) {
+
+            if (in_array($query[$this->queryTypeName], $this->allowedQueryTypes)) {
+                $queryType = $query[$this->queryTypeName];
+            }
+            unset($query[$this->queryTypeName]);
         }
+
+
     }
 
     /**
@@ -51,7 +57,7 @@ trait QueryFilter
      */
     protected function setQueryTypeName(string $typeName): void
     {
-        $this->queryTypeName = Column::set($this->model, $typeName, $this->connectionType);
+        $this->queryTypeName = Column::set($this, $typeName);
     }
 
 }

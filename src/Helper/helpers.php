@@ -1,7 +1,6 @@
 <?php
 
 use H22k\QueryFilter\F;
-use JetBrains\PhpStorm\ArrayShape;
 
 if ( ! function_exists('h22kFilter')) {
 

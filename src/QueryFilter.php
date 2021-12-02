@@ -7,7 +7,7 @@ trait QueryFilter
 
     /**
      * Model columns you want to filter.
-     * Example: ['name', 'age', 'email']
+     * Example: ['F::set('name', 'like')', 'F::set('age', 'higher')']
      *
      * @var array
      */
@@ -48,6 +48,7 @@ trait QueryFilter
 
 
     }
+
 
     /**
      * Setting query type name. Throws an exception if the table has a column with the same name.

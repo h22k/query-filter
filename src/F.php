@@ -7,8 +7,19 @@ use H22k\QueryFilter\Exceptions\NotCallable;
 class F
 {
 
+    /**
+     * @var string
+     */
     private string $column;
+
+    /**
+     * @var string
+     */
     private string $queryType;
+
+    /**
+     * @var callable|null
+     */
     private $callback;
 
     private function __construct(string $column, string $queryType, ?Callable $callback)

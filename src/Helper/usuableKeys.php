@@ -1,0 +1,12 @@
+<?php
+return
+    [
+        'like',
+        'higher',
+        'lower',
+        'between',
+        'exact',
+        'custom',
+        'is_null',
+        'is_not_null',
+    ];
